@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-request-location-accuracy"
+    version="1.0.0">
+
+    <name>Request Location Accuracy</name>
+    <description>Cordova/Phonegap plugin for Android to request Location Accuracy mode via Google Play Services.</description>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="RequestLocationAccuracy" >
+                <param name="android-package" value="cordova.plugin.RequestLocationAccuracy"/>
+            </feature>
+        </config-file>
+
+        <js-module src="www/RequestLocationAccuracy.js" name="RequestLocationAccuracy">
+            <clobbers target="cordova.plugin.locationAccuracy" />
+        </js-module>
+
+        <source-file src="src/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
+
+        <framework src="com.google.android.gms:play-services-location:+" />
+
+    </platform>
+</plugin>
