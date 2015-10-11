@@ -16,7 +16,7 @@
         </config-file>
 
         <js-module src="www/RequestLocationAccuracy.js" name="RequestLocationAccuracy">
-            <clobbers target="cordova.plugin.locationAccuracy" />
+            <clobbers target="cordova.plugins.locationAccuracy" />
         </js-module>
 
         <source-file src="src/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />

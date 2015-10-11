@@ -42,9 +42,9 @@ Add the following xml to your config.xml to use the latest version of this plugi
 
 # Usage
 
-The plugin is exposed via the `cordova.plugin.locationAccuracy` object and provides a single function:
+The plugin is exposed via the `cordova.plugins.locationAccuracy` object and provides a single function:
 
-    `cordova.plugin.locationAccuracy.request(successCallback, errorCallback, accuracy)`
+    `cordova.plugins.locationAccuracy.request(successCallback, errorCallback, accuracy)`
 
 ## Parameters
 
@@ -60,12 +60,12 @@ A single object argument will be passed which has two keys:
 
 ## Request constants
 
-The location accuracy which is to be requested is defined as a set of REQUEST constants on the `cordova.plugin.locationAccuracy` object:
+The location accuracy which is to be requested is defined as a set of REQUEST constants on the `cordova.plugins.locationAccuracy` object:
 
-- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_NO_POWER`: Request location mode priority "no power": the best accuracy possible with zero additional power consumption.
-- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_LOW_POWER`: Request location mode priority "low power":  "city" level accuracy (about 10km accuracy).
-- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_BALANCED_POWER_ACCURACY`: Request location mode priority "balanced power":  "block" level accuracy (about 100 meter accuracy).
-- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY`: Request location mode priority "high accuracy":  the most accurate locations available. This will use GPS hardware to retrieve positions.
+- `cordova.plugins.locationAccuracy.REQUEST_PRIORITY_NO_POWER`: Request location mode priority "no power": the best accuracy possible with zero additional power consumption.
+- `cordova.plugins.locationAccuracy.REQUEST_PRIORITY_LOW_POWER`: Request location mode priority "low power":  "city" level accuracy (about 10km accuracy).
+- `cordova.plugins.locationAccuracy.REQUEST_PRIORITY_BALANCED_POWER_ACCURACY`: Request location mode priority "balanced power":  "block" level accuracy (about 100 meter accuracy).
+- `cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY`: Request location mode priority "high accuracy":  the most accurate locations available. This will use GPS hardware to retrieve positions.
 
 
 See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constants](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constants)
@@ -73,25 +73,25 @@ See [https://developers.google.com/android/reference/com/google/android/gms/loca
 ## Callback constants
 
 Both the `successCallback()` and `errorCallback()` functions will be passed an object which contains both a descriptive message and a code indicating the result of the operation.
-These constants are defined on the `cordova.plugin.locationAccuracy` object.
+These constants are defined on the `cordova.plugins.locationAccuracy` object.
 
 ### Success constants
 
 The `successCallback()` function will be pass an object where the "code" key may correspond to the following values:
 
-- `cordova.plugin.locationAccuracy.SUCCESS_SETTINGS_SATISFIED`: Success due to current location settings already satisfying requested accuracy.
-- `cordova.plugin.locationAccuracy.SUCCESS_USER_AGREED`: Success due to user agreeing to requested accuracy change
+- `cordova.plugins.locationAccuracy.SUCCESS_SETTINGS_SATISFIED`: Success due to current location settings already satisfying requested accuracy.
+- `cordova.plugins.locationAccuracy.SUCCESS_USER_AGREED`: Success due to user agreeing to requested accuracy change
 
 ### Error constants
 
 The `errorCallback()` function will be pass an object where the "code" key may correspond to the following values:
 
-- `cordova.plugin.locationAccuracy.ERROR_INVALID_ACTION`: Error due invalid action requested.
-- `cordova.plugin.locationAccuracy.ERROR_INVALID_ACCURACY`: Error due invalid accuracy requested.
-- `cordova.plugin.locationAccuracy.ERROR_EXCEPTION`: Error due to exception in the native code.
-- `cordova.plugin.locationAccuracy.ERROR_CANNOT_CHANGE_ACCURACY`: Error due to not being able to change location accuracy to requested state.
-- `cordova.plugin.locationAccuracy.ERROR_USER_DISAGREED`: Error due to user rejecting requested accuracy change.
-- `cordova.plugin.locationAccuracy.ERROR_GOOGLE_API_CONNECTION_FAILED`: Error due to failure to connect to Google Play Services API. The "message" key will contain a detailed description of the Google Play Services error.
+- `cordova.plugins.locationAccuracy.ERROR_INVALID_ACTION`: Error due invalid action requested.
+- `cordova.plugins.locationAccuracy.ERROR_INVALID_ACCURACY`: Error due invalid accuracy requested.
+- `cordova.plugins.locationAccuracy.ERROR_EXCEPTION`: Error due to exception in the native code.
+- `cordova.plugins.locationAccuracy.ERROR_CANNOT_CHANGE_ACCURACY`: Error due to not being able to change location accuracy to requested state.
+- `cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED`: Error due to user rejecting requested accuracy change.
+- `cordova.plugins.locationAccuracy.ERROR_GOOGLE_API_CONNECTION_FAILED`: Error due to failure to connect to Google Play Services API. The "message" key will contain a detailed description of the Google Play Services error.
 
 
 
@@ -103,14 +103,14 @@ The `errorCallback()` function will be pass an object where the "code" key may c
 
     function onRequestFailure(error){
         console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-        if(error.code !== cordova.plugin.locationAccuracy.ERROR_USER_DISAGREED){
+        if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
             if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
                 cordova.plugins.diagnostic.switchToLocationSettings();
             }
         }
     }
 
-    cordova.plugin.locationAccuracy.request(onRequestSuccess, onRequestFailure, cordova.plugin.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+    cordova.plugins.locationAccuracy.request(onRequestSuccess, onRequestFailure, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
 
 # Example project
 
