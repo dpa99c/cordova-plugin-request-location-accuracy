@@ -50,29 +50,25 @@ The plugin is exposed via the `cordova.plugin.locationAccuracy` object and provi
 
 - {Function} successCallback - callback to be invoked on successful resolution of the requested accuracy.
 A single object argument will be passed which has two keys:
-"code" in an integer corresponding to a [SUCCESS constant](#success_constants) and indicates the reason for success;
+"code" in an integer corresponding to a [SUCCESS constant](#success-constants) and indicates the reason for success;
 "message" is a string containing a description of the success.
 - {Function} errorCallback - callback to be invoked on failure to resolve the requested accuracy.
 A single object argument will be passed which has two keys:
-"code" in an integer corresponding to an [ERROR constant](#error_constants) and indicates the reason for failure;
+"code" in an integer corresponding to an [ERROR constant](#error-constants) and indicates the reason for failure;
 "message" is a string containing a description of the error.
-- {Integer} accuracy - The location accuracy to request defined by an integer corresponding to a [REQUEST constant](#request_contsnts).
+- {Integer} accuracy - The location accuracy to request defined by an integer corresponding to a [REQUEST constant](#request-constants).
 
 ## Request constants
 
 The location accuracy which is to be requested is defined as a set of REQUEST constants on the `cordova.plugin.locationAccuracy` object:
 
 - `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_NO_POWER`: Request location mode priority "no power": the best accuracy possible with zero additional power consumption.
-See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_NO_POWER](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_NO_POWER)
-
-- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_LOW_POWER`: Request location mode priority "low power":  "city" level accuracy (about 10km accuracy)
-See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_LOW_POWER](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_LOW_POWER)
-
+- `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_LOW_POWER`: Request location mode priority "low power":  "city" level accuracy (about 10km accuracy).
 - `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_BALANCED_POWER_ACCURACY`: Request location mode priority "balanced power":  "block" level accuracy (about 100 meter accuracy).
-See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_BALANCED_POWER_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_BALANCED_POWER_ACCURACY)
-
 - `cordova.plugin.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY`: Request location mode priority "high accuracy":  the most accurate locations available. This will use GPS hardware to retrieve positions.
-See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_HIGH_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_HIGH_ACCURACY)
+
+
+See [https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constants](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constants)
 
 ## Callback constants
 
