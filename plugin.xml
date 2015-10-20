@@ -2,10 +2,19 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-request-location-accuracy"
-    version="1.0.0">
+    version="1.0.1">
 
     <name>Request Location Accuracy</name>
     <description>Cordova/Phonegap plugin for Android to request Location Accuracy mode via Google Play Services.</description>
+    <author>Dave Alden</author>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+    
+    <repo>https://github.com/dpa99c/cordova-plugin-request-location-accuracy.git</repo>
+    <issue>https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues</issue>
+    <keywords>ecosystem:cordova,cordova,phonegap,android,diagnostic,location,accuracy,high accuracy,fine accuracy,gps,settings</keywords>
+    <license>MIT</license>
 
     <!-- android -->
     <platform name="android">
