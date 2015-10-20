@@ -13,7 +13,7 @@
         "id": "cordova-plugin-request-location-accuracy",
         "platforms": [
             "android"
-        ],
+        ]
     },
     "issue": "https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues",
     "keywords": [
