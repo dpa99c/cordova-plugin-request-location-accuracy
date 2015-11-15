@@ -20,6 +20,8 @@ It uses the Google Play Services Location API (v7+) to change the device locatio
 So why is this plugin not just part of [cordova.plugins.diagnostic](https://github.com/dpa99c/cordova-diagnostic-plugin)?
 Because you may not wish to use the location features of the diagnostic plugin and the dependency on the Google Play Services library increases the size of the app APK by about 2Mb.
 
+[![Example app demo](https://j.gifs.com/KRL8Mb.gif)](https://www.youtube.com/watch?v=pbNdnMDRstg)
+
 # Installation
 
 ## Using the Cordova/Phonegap [CLI](http://docs.phonegap.com/en/edge/guide_cli_index.md.html)
