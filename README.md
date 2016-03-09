@@ -2,6 +2,7 @@ Cordova Request Location Accuracy Plugin for Android
 ====================================================
 
 * [Overview](#overview)
+* [Pre-requisites](#pre-requisites)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Example project](#example-project)
@@ -21,6 +22,13 @@ So why is this plugin not just part of [cordova.plugins.diagnostic](https://gith
 Because you may not wish to use the location features of the diagnostic plugin and the dependency on the Google Play Services library increases the size of the app APK by about 2Mb.
 
 [![Example app demo](https://j.gifs.com/KRL8Mb.gif)](https://www.youtube.com/watch?v=pbNdnMDRstg)
+
+# Pre-requisites
+
+**IMPORTANT:** This plugin depends on the Google Play Services library, so you must install the "Google Repository" package under the "Extras" section in Android SDK Manager.
+Otherwise the build will fail.
+
+![SDK Manager](http://i.stack.imgur.com/jPqsW.png)
 
 # Installation
 
