@@ -30,7 +30,7 @@
 
         <source-file src="src/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
 
-        <framework src="com.google.android.gms:play-services-location:+" />
+        <framework src="com.google.android.gms:play-services-location:9.0.0" />
 
     </platform>
 </plugin>
