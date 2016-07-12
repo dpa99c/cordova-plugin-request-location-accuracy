@@ -52,11 +52,16 @@ Add the following xml to your config.xml to use the latest version of this plugi
 
 # Usage
 
-The plugin is exposed via the `cordova.plugins.locationAccuracy` object and provides a single function:
+The plugin is exposed via the `cordova.plugins.locationAccuracy` object and provides the following:
 
-    `cordova.plugins.locationAccuracy.request(successCallback, errorCallback, accuracy)`
 
-## Parameters
+## request()
+
+Requests a specific accuracy for Location Services.
+
+    cordova.plugins.locationAccuracy.request(successCallback, errorCallback, accuracy)
+
+Parameters:
 
 - {Function} successCallback - callback to be invoked on successful resolution of the requested accuracy.
 A single object argument will be passed which has two keys:
@@ -67,6 +72,14 @@ A single object argument will be passed which has two keys:
 "code" in an integer corresponding to an [ERROR constant](#error-constants) and indicates the reason for failure;
 "message" is a string containing a description of the error.
 - {Integer} accuracy - The location accuracy to request defined by an integer corresponding to a [REQUEST constant](#request-constants).
+
+# isRequesting()
+
+Indicates if a request is currently in progress.
+
+    var isRequesting = cordova.plugins.locationAccuracy.isRequesting();
+
+Returns a boolean indicating if a request is currently in progress.
 
 ## Request constants
 
@@ -96,6 +109,7 @@ The `successCallback()` function will be pass an object where the "code" key may
 
 The `errorCallback()` function will be pass an object where the "code" key may correspond to the following values:
 
+- `cordova.plugins.locationAccuracy.ERROR_ALREADY_REQUESTING`: Error due an unresolved request already being in progress.
 - `cordova.plugins.locationAccuracy.ERROR_INVALID_ACTION`: Error due invalid action requested.
 - `cordova.plugins.locationAccuracy.ERROR_INVALID_ACCURACY`: Error due invalid accuracy requested.
 - `cordova.plugins.locationAccuracy.ERROR_EXCEPTION`: Error due to exception in the native code.

@@ -3,7 +3,9 @@
  *
  *  Copyright (c) 2015 Working Edge Ltd.
 **/
-var RequestLocationAccuracy = function(){};
+var RequestLocationAccuracy = function(){
+	this.requesting = false;
+};
 
 /**
  * Request location mode priority "no power": the best accuracy possible with zero additional power consumption.
@@ -46,6 +48,11 @@ RequestLocationAccuracy.prototype.SUCCESS_SETTINGS_SATISFIED = 0;
  */
 RequestLocationAccuracy.prototype.SUCCESS_USER_AGREED = 1;
 
+/**
+ * Error due an unresolved request already being in progress.
+ * @type {number}
+ */
+RequestLocationAccuracy.prototype.ERROR_ALREADY_REQUESTING = -1;
 
 /**
  * Error due invalid action requested
@@ -84,6 +91,7 @@ RequestLocationAccuracy.prototype.ERROR_USER_DISAGREED = 4;
 RequestLocationAccuracy.prototype.ERROR_GOOGLE_API_CONNECTION_FAILED = 5;
 
 /**
+ * Requests a specific accuracy for Location Services.
  *
  * @param [Function} successCallback - callback to be invoked on successful resolution of the requested accuracy.
  * A single object argument will be passed which has two keys: "code" in an integer corresponding to a SUCCESS constant and indicates the reason for success;
@@ -94,11 +102,37 @@ RequestLocationAccuracy.prototype.ERROR_GOOGLE_API_CONNECTION_FAILED = 5;
  * @param {Integer} accuracy - The location accuracy to request defined by an integer corresponding to a REQUEST constant.
  */
 RequestLocationAccuracy.prototype.request = function(successCallback, errorCallback, accuracy) {
-	return cordova.exec(successCallback,
-		errorCallback,
+	var _this = this;
+
+	if(this.requesting){
+		return errorCallback({
+			code: _this.ERROR_ALREADY_REQUESTING,
+			message: "A request is already in progress"
+		});
+	}
+
+	this.requesting = true;
+
+	return cordova.exec(function(data){
+			_this.requesting = false;
+			successCallback(data)
+		},
+		function(err) {
+			_this.requesting = false;
+			errorCallback(err);
+		},
 		'RequestLocationAccuracy',
 		'request',
 		[accuracy]);
+};
+
+/**
+ * Indicates if a request is currently in progress.
+ *
+ * @returns {boolean} true if a current request is in progress.
+ */
+RequestLocationAccuracy.prototype.isRequesting = function() {
+	return !!this.requesting;
 };
 
 module.exports = new RequestLocationAccuracy();
