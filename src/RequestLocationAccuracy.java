@@ -165,10 +165,10 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         boolean result;
+        context = callbackContext;
         try {
             if(action.equals("request")) {
                 result = request(args.getInt(0));
-                context = callbackContext;
             }else {
                 handleError("Invalid action", ERROR_INVALID_ACTION);
                 result = false;
