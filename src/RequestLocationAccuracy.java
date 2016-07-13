@@ -52,7 +52,7 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     /**
      * Provides the entry point to Google Play services.
      */
-    protected GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient = null;
 
 
     /**
@@ -135,7 +135,12 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     /**
      * Cordova callback context
      */
-    protected CallbackContext context;
+    protected CallbackContext context = null;
+
+    /**
+     * Indicates a permanent error, so doesn't recheck since the Google APIs won't invoke the listeners on subsequent calls.
+     */
+    protected ConnectionResult permanentError = null;
 
     /**
      * Constructor.
@@ -152,7 +157,11 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
      */
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        buildGoogleApiClient();
+        try {
+            buildGoogleApiClient();
+        }catch(Exception e ) {
+            handleError(e.getMessage(), ERROR_EXCEPTION);
+        }
     }
 
     /**
@@ -181,8 +190,17 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     }
 
     public boolean request(int requestedAccuracy) throws Exception{
-        int priority;
+        if(permanentError != null){
+            this.onConnectionFailed(permanentError);
+            return true;
+        }
 
+        if(mGoogleApiClient == null){
+            handleError("Google Play Services Client failed to initialize", ERROR_GOOGLE_API_CONNECTION_FAILED);
+            return true;
+        }
+
+        int priority;
         switch(requestedAccuracy){
             case REQUEST_PRIORITY_NO_POWER:
                 priority = LocationRequest.PRIORITY_NO_POWER;
@@ -210,10 +228,12 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     protected void handleError(String errorMsg, int errorCode){
         try {
             Log.e(TAG, errorMsg);
-            JSONObject error = new JSONObject();
-            error.put("message", errorMsg);
-            error.put("code", errorCode);
-            context.error(error);
+            if(context != null){
+                JSONObject error = new JSONObject();
+                error.put("message", errorMsg);
+                error.put("code", errorCode);
+                context.error(error);
+            }
         } catch (JSONException e) {
             Log.e(TAG, e.toString());
         }
@@ -372,9 +392,15 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     @Override
     public void onDestroy() {
         Log.i(TAG, "On onDestroy");
-        super.onStop();
-        Log.i(TAG, "Disconnect Google API client");
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient != null){
+            super.onStop();
+            Log.i(TAG, "Disconnect Google API client");
+            try {
+                mGoogleApiClient.disconnect();
+            }catch(Exception e ) {
+                handleError(e.getMessage(), ERROR_EXCEPTION);
+            }
+        }
     }
 
     @Override
@@ -411,12 +437,15 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
                 break;
             case ConnectionResult.SERVICE_DISABLED:
                 reason = "The installed version of Google Play services has been disabled on this device.";
+                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_INVALID:
                 reason = "The version of the Google Play services installed on this device is not authentic.";
+                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_MISSING:
                 reason = "Google Play services is missing on this device.";
+                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_MISSING_PERMISSION:
                 reason = "Google Play service doesn't have one or more required permissions.";
