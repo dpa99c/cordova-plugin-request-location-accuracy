@@ -11,6 +11,8 @@
 @interface RequestLocationAccuracy :CDVPlugin {
 }
 
+@property (nonatomic, strong) CLLocationManager* locationManager;
+
 - (void) request:(CDVInvokedUrlCommand*)command;
 
 @end

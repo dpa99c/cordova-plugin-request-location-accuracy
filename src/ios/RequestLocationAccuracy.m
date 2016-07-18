@@ -2,6 +2,16 @@
 
 @implementation RequestLocationAccuracy
 
+@synthesize locationManager, locationData;
+
+- (void)pluginInitialize
+{
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager startUpdatingLocation];
+    [self.locationManager stopUpdatingLocation];
+}
+
 - (void) request:(CDVInvokedUrlCommand*)command;{
     @try {
 
