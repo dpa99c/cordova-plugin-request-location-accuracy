@@ -16,7 +16,6 @@
     <keywords>ecosystem:cordova,cordova,phonegap,android,diagnostic,location,accuracy,high accuracy,fine accuracy,gps,settings</keywords>
     <license>MIT</license>
 
-    <!-- android -->
     <platform name="android">
         <config-file target="config.xml" parent="/*">
             <feature name="RequestLocationAccuracy" >
@@ -24,13 +23,30 @@
             </feature>
         </config-file>
 
-        <js-module src="www/RequestLocationAccuracy.js" name="RequestLocationAccuracy">
+        <js-module src="www/android/RequestLocationAccuracy.js" name="RequestLocationAccuracy">
             <clobbers target="cordova.plugins.locationAccuracy" />
         </js-module>
 
-        <source-file src="src/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
+        <source-file src="src/android/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
 
         <framework src="com.google.android.gms:play-services-location:+" />
+    </platform>
 
+    <platform name="ios">
+
+        <js-module src="www/ios/RequestLocationAccuracy.js" name="RequestLocationAccuracy">
+            <clobbers target="cordova.plugins.locationAccuracy" />
+        </js-module>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="RequestLocationAccuracy">
+                <param name="ios-package" value="RequestLocationAccuracy"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/RequestLocationAccuracy.h" />
+        <source-file src="src/ios/RequestLocationAccuracy.m" />
+
+        <framework src="CoreLocation.framework" />
     </platform>
 </plugin>
