@@ -15,7 +15,6 @@
 // Plugin API
 - (void) request:(CDVInvokedUrlCommand*)command;{
     CDVPluginResult* pluginResult;
-    __callbackId = command.callbackId;
     @try {
         if (__locationStarted) {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Location is already being requested"];
@@ -24,13 +23,12 @@
         }else{
             [self.locationManager startUpdatingLocation];
             __locationStarted = YES;
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-            [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         }
     }@catch (NSException *exception) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:exception.reason];
     }
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:__callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) isRequesting:(CDVInvokedUrlCommand*)command;{
@@ -72,7 +70,7 @@
 - (BOOL)isAuthorized
 {
     BOOL authorizationStatusClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
-    
+
     if (authorizationStatusClassPropertyAvailable) {
         NSUInteger authStatus = [CLLocationManager authorizationStatus];
 #ifdef __IPHONE_8_0
@@ -82,7 +80,7 @@
 #endif
         return (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
     }
-    
+
     // by default, assume YES (for iOS < 4.2)
     return YES;
 }
@@ -91,7 +89,7 @@
 {
     BOOL locationServicesEnabledInstancePropertyAvailable = [self.locationManager respondsToSelector:@selector(locationServicesEnabled)]; // iOS 3.x
     BOOL locationServicesEnabledClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(locationServicesEnabled)]; // iOS 4.x
-    
+
     if (locationServicesEnabledClassPropertyAvailable) { // iOS 4.x
         return [CLLocationManager locationServicesEnabled];
     } else if (locationServicesEnabledInstancePropertyAvailable) { // iOS 2.x, iOS 3.x
@@ -108,17 +106,13 @@
            fromLocation:(CLLocation*)oldLocation
 {
     [self stopRequestingLocation];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:__callbackId];
+
 }
 
 - (void)locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
 {
     NSLog(@"locationManager::didFailWithError %@", [error localizedFailureReason]);
-    
-    if (__locationStarted) {
-        [self stopRequestingLocation];
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:__callbackId];
-    }
+    [self stopRequestingLocation];
 }
 
 @end

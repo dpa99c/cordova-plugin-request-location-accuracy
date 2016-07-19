@@ -4,7 +4,6 @@
 
 @interface RequestLocationAccuracy : CDVPlugin <CLLocationManagerDelegate>{
 @private BOOL __locationStarted;
-@private NSString* __callbackId;
 }
 
 @property (nonatomic, strong) CLLocationManager* locationManager;

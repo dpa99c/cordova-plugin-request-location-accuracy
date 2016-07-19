@@ -1,7 +1,7 @@
 /**
- *  Request Location Accuracy plugin for Android
+ *  Request Location Accuracy plugin
  *
- *  Copyright (c) 2015 Working Edge Ltd.
+ *  Copyright (c) 2016 Dave Alden (Working Edge Ltd.)
 **/
 var RequestLocationAccuracy = function(){
 };
@@ -15,6 +15,27 @@ var RequestLocationAccuracy = function(){
  */
 RequestLocationAccuracy.prototype.request = function(successCallback, errorCallback) {
 	return cordova.exec(successCallback, errorCallback, 'RequestLocationAccuracy', 'request', []);
+};
+
+/**
+ * Indicates if a request is possible to invoke to native dialog to turn on Location Services.
+ * This will return true if Location Services is currently OFF.
+ *
+ * @param [Function} successCallback - callback to be invoked on successful position request.
+ * This is passed a boolean argument indicating if a request can be made.
+ */
+RequestLocationAccuracy.prototype.canRequest = function(successCallback) {
+	return cordova.exec(successCallback, null, 'RequestLocationAccuracy', 'isRequesting', []);
+};
+
+/**
+ * Indicates if a request is currently in progress.
+ *
+ * @param [Function} successCallback - callback to be invoked on successful position request.
+ * This is passed a boolean argument indicating if a request is currently in progress;
+ */
+RequestLocationAccuracy.prototype.isRequesting = function(successCallback) {
+	return cordova.exec(successCallback, null, 'RequestLocationAccuracy', 'isRequesting', []);
 };
 
 module.exports = new RequestLocationAccuracy();
