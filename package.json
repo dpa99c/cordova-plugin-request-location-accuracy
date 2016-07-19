@@ -12,7 +12,8 @@
     "cordova": {
         "id": "cordova-plugin-request-location-accuracy",
         "platforms": [
-            "android"
+          "android",
+          "ios"
         ]
     },
     "issue": "https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues",
@@ -20,6 +21,7 @@
         "ecosystem:cordova",
         "cordova",
         "cordova-android",
+        "cordova-ios",
         "phonegap",
         "diagnostic",
         "location",

@@ -5,7 +5,7 @@
     version="2.0.0">
 
     <name>Request Location Accuracy</name>
-    <description>Cordova/Phonegap plugin for Android to request Location Accuracy mode via Google Play Services.</description>
+    <description>Cordova/Phonegap plugin for Android and iOS to request enabling/changing of Location Services by triggering a native dialog</description>
     <author>Dave Alden</author>
     <engines>
         <engine name="cordova" version=">=3.0.0" />
