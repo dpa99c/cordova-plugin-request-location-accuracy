@@ -1,5 +1,5 @@
 {
-    "version": "1.0.3",
+    "version": "2.0.0",
     "name": "cordova-plugin-request-location-accuracy",
     "cordova_name": "Request Location Accuracy",
     "description": "Cordova/Phonegap plugin for Android to request Location Accuracy mode via Google Play Services.",
