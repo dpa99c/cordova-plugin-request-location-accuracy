@@ -55,7 +55,7 @@
 
 - (BOOL) canRequest
 {
-    return ![self isLocationServicesEnabled];
+    return ![self isLocationServicesEnabled] && !__locationStarted;
 }
 
 
