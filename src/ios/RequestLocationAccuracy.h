@@ -1,18 +1,16 @@
-
-#ifdef CORDOVA_FRAMEWORK
 #import <Cordova/CDVPlugin.h>
-#else
-#import "Cordova/CDVPlugin.h"
-#endif
-
-#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 
-@interface RequestLocationAccuracy :CDVPlugin {
+@interface RequestLocationAccuracy : CDVPlugin <CLLocationManagerDelegate>{
+@private BOOL __locationStarted;
+@private NSString* __callbackId;
 }
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 
 - (void) request:(CDVInvokedUrlCommand*)command;
+- (void) isRequesting:(CDVInvokedUrlCommand*)command;
+- (void) canRequest:(CDVInvokedUrlCommand*)command;
 
 @end
