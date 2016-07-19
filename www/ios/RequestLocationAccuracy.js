@@ -21,7 +21,7 @@ RequestLocationAccuracy.prototype.request = function(successCallback, errorCallb
  * Indicates if a request is possible to invoke to native dialog to turn on Location Services.
  * This will return true if Location Services is currently OFF and request is not currently in progress.
  *
- * @param [Function} successCallback - callback to be invoked on successful position request.
+ * @param [Function} successCallback - callback to pass result to.
  * This is passed a boolean argument indicating if a request can be made.
  */
 RequestLocationAccuracy.prototype.canRequest = function(successCallback) {
@@ -31,7 +31,7 @@ RequestLocationAccuracy.prototype.canRequest = function(successCallback) {
 /**
  * Indicates if a request is currently in progress.
  *
- * @param [Function} successCallback - callback to be invoked on successful position request.
+ * @param [Function} successCallback - callback to pass result to.
  * This is passed a boolean argument indicating if a request is currently in progress;
  */
 RequestLocationAccuracy.prototype.isRequesting = function(successCallback) {

@@ -129,10 +129,11 @@ RequestLocationAccuracy.prototype.request = function(successCallback, errorCallb
 /**
  * Indicates if a request is currently in progress.
  *
- * @returns {boolean} true if a current request is in progress.
+ * @param [Function} successCallback - callback to pass result to.
+ * This is passed a boolean argument indicating if a request is currently in progress;
  */
-RequestLocationAccuracy.prototype.isRequesting = function() {
-	return !!this.requesting;
+RequestLocationAccuracy.prototype.isRequesting = function(successCallback) {
+	successCallback(!!this.requesting);
 };
 
 module.exports = new RequestLocationAccuracy();
