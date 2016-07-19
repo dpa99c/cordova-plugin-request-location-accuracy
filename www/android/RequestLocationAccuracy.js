@@ -1,8 +1,8 @@
 /**
- *  Request Location Accuracy plugin for Android
+ *  Request Location Accuracy plugin
  *
- *  Copyright (c) 2015 Working Edge Ltd.
-**/
+ *  Copyright (c) 2016 Dave Alden (Working Edge Ltd.)
+ **/
 var RequestLocationAccuracy = function(){
 	this.requesting = false;
 };
