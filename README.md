@@ -61,7 +61,7 @@ It is not programmatically possible to switch Location Services ON or to directl
 
 The best that can be done by direct programmatic invocation of the Settings app is to open the app's own permissions page - the [`switchToSettings()`](https://github.com/dpa99c/cordova-diagnostic-plugin#switchtosettings) of [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin#switchtosettings) enables you to do this. However, the user must still manually navigate from the app permissions page in the Settings app to the Location Services setting on the Privacy page.
 
-If Location Services is turned OFF, this plugin enables an app to display a native iOS system which gives user the option of directly opening the Privacy page in the Settings app which contains the switch to turn Location Services ON.
+If Location Services is turned OFF, this plugin enables an app to display a native iOS system dialog which gives user the option of directly opening the Privacy page in the Settings app which contains the switch to turn Location Services ON.
 
 In order to show the native dialog allowing direct opening of the Privacy page, a location must be requested via the native location manager. So why can't you just use [cordova-plugin-geolocation](https://github.com/apache/cordova-plugin-geolocation) to request the location? Because when Location Services is OFF, the app reports that use of location is unauthorized, and [cordova-plugin-geolocation](https://github.com/apache/cordova-plugin-geolocation) will not request a location if it determines location is unauthorized: see [this Cordova issue](https://issues.apache.org/jira/browse/CB-10478).
 
