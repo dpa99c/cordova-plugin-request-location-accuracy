@@ -25,7 +25,7 @@ RequestLocationAccuracy.prototype.request = function(successCallback, errorCallb
  * This is passed a boolean argument indicating if a request can be made.
  */
 RequestLocationAccuracy.prototype.canRequest = function(successCallback) {
-	return cordova.exec(successCallback, null, 'RequestLocationAccuracy', 'isRequesting', []);
+	return cordova.exec(successCallback, null, 'RequestLocationAccuracy', 'canRequest', []);
 };
 
 /**
