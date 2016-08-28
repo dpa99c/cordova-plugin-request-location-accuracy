@@ -19,7 +19,8 @@
         if (__locationStarted) {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Location is already being requested"];
         }else if(![self canRequest]){
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Location services is already enabled"];
+            // Location services is already enabled
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         }else{
             [self.locationManager startUpdatingLocation];
             __locationStarted = YES;
