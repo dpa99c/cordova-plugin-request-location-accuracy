@@ -14,12 +14,16 @@ Cordova Request Location Accuracy Plugin
 - [Usage](#usage)
   - [Android & iOS](#android-&-ios)
     - [request()](#request)
+      - [Android](#android)
+      - [iOS](#ios)
+      - [Combined Android & iOS example](#combined-android-&-ios-example)
     - [isRequesting()](#isrequesting)
-  - [iOS-only](#ios-only)
     - [canRequest()](#canrequest)
   - [Android-only](#android-only)
     - [Request constants](#request-constants)
     - [Callback constants](#callback-constants)
+      - [Success constants](#success-constants)
+      - [Error constants](#error-constants)
 - [License](#license)
 
 <!-- END table-of-contents -->
@@ -91,6 +95,8 @@ The plugin is exposed via the `cordova.plugins.locationAccuracy` object.
 
 ### request()
 
+This is the main plugin method.
+
 #### Android
 
 Requests a specific accuracy for Location Services.
@@ -111,16 +117,20 @@ A single object argument will be passed which has two keys:
 
 Example usage:
 
-    cordova.plugins.locationAccuracy.request(function (success){
-        console.log("Successfully requested accuracy: "+success.message);
-    }, function (error){
-       console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-       if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-           if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-               cordova.plugins.diagnostic.switchToLocationSettings();
-           }
-       }
-    }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+    cordova.plugins.locationAccuracy.canRequest(function(canRequest){
+        if(canRequest){
+            cordova.plugins.locationAccuracy.request(function (success){
+                console.log("Successfully requested accuracy: "+success.message);
+            }, function (error){
+               console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+               if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+                   if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                       cordova.plugins.diagnostic.switchToLocationSettings();
+                   }
+               }
+            }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+        }
+    });
 
 #### iOS
 
@@ -145,6 +155,30 @@ Example usage:
         }
     });
 
+#### Combined Android & iOS example
+
+    cordova.plugins.locationAccuracy.canRequest(function(canRequest){
+        if(canRequest){
+            cordova.plugins.locationAccuracy.request(function(){
+                console.log("Request successful");
+            }, function (error){
+                console.error("Request failed");
+                if(error){
+                    // Android only
+                    console.error("error code="+error.code+"; error message="+error.message);
+                    if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+                        if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                            cordova.plugins.diagnostic.switchToLocationSettings();
+                        }
+                    }
+                }
+            }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY // iOS will ignore this
+            );
+        }
+    });
+
+
+
 ### isRequesting()
 
 Indicates if a request is currently in progress.
@@ -162,12 +196,11 @@ Example usage:
         console.log("A request " + (requesting ? "is" : "is not") + " currently in progress");
      });
 
-## iOS-only
-
 ### canRequest()
 
-Indicates if a request is possible to invoke to native dialog to turn on Location Services.
-This will return true if Location Services is currently OFF and request is not currently in progress.
+Indicates if a request is possible to invoke a request.
+On iOS, this will return true if Location Services is currently OFF and request is not currently in progress.
+On Android, this will return true if the app has authorization to use location.
 
     cordova.plugins.locationAccuracy.canRequest(successCallback);
 
@@ -182,7 +215,6 @@ Example usage:
     cordova.plugins.locationAccuracy.canRequest(function(canRequest){
         console.log("A request " + (canRequest ? "can" : "cannot") + " currently be made");
     });
-
 
 ## Android-only
 

@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
+import android.location.LocationManager;
 import android.util.Log;
 import android.os.Bundle;
 import android.app.Activity;
@@ -42,6 +44,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+
+import java.lang.reflect.Method;
 
 public class RequestLocationAccuracy extends CordovaPlugin implements
         GoogleApiClient.ConnectionCallbacks,
@@ -142,6 +146,8 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
      */
     protected ConnectionResult permanentError = null;
 
+    public static LocationManager locationManager;
+
     /**
      * Constructor.
      */
@@ -178,6 +184,8 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
         try {
             if(action.equals("request")) {
                 result = request(args.getInt(0));
+            }else if(action.equals("canRequest")) {
+                result = canRequest();
             }else {
                 handleError("Invalid action", ERROR_INVALID_ACTION);
                 result = false;
@@ -223,6 +231,31 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
         buildLocationSettingsRequest();
         checkLocationSettings();
         return true;
+    }
+
+    public boolean canRequest() throws Exception{
+        boolean _canRequest = isLocationAuthorized();
+        context.success(_canRequest ? 1 : 0);
+        return true;
+    }
+
+    private boolean isLocationAuthorized() throws Exception {
+        boolean authorized = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) || hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        Log.v(TAG, "Location permission is " + (authorized ? "authorized" : "unauthorized"));
+        return authorized;
+    }
+
+    private boolean hasPermission(String permission) throws Exception{
+        boolean hasPermission = true;
+        Method method = null;
+        try {
+            method = cordova.getClass().getMethod("hasPermission", permission.getClass());
+            Boolean bool = (Boolean) method.invoke(cordova, permission);
+            hasPermission = bool.booleanValue();
+        } catch (NoSuchMethodException e) {
+            Log.w(TAG, "Cordova v" + CordovaWebView.CORDOVA_VERSION + " does not support runtime permissions so defaulting to GRANTED for " + permission);
+        }
+        return hasPermission;
     }
 
     protected void handleError(String errorMsg, int errorCode){

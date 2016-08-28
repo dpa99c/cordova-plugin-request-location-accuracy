@@ -136,5 +136,16 @@ RequestLocationAccuracy.prototype.isRequesting = function(successCallback) {
 	successCallback(!!this.requesting);
 };
 
+/**
+ * Indicates if it is possible to request a specific location accuracy.
+ * This will return true if the app is authorized to use location.
+ *
+ * @param [Function} successCallback - callback to pass result to.
+ * This is passed a boolean argument indicating if a request can be made.
+ */
+RequestLocationAccuracy.prototype.canRequest = function(successCallback) {
+	return cordova.exec(successCallback, null, 'RequestLocationAccuracy', 'canRequest', []);
+};
+
 module.exports = new RequestLocationAccuracy();
 
