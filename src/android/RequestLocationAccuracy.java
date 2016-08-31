@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.Manifest;
-import android.location.LocationManager;
 import android.util.Log;
 import android.os.Bundle;
 import android.app.Activity;
@@ -145,8 +144,6 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
      * Indicates a permanent error, so doesn't recheck since the Google APIs won't invoke the listeners on subsequent calls.
      */
     protected ConnectionResult permanentError = null;
-
-    public static LocationManager locationManager;
 
     /**
      * Constructor.
@@ -439,6 +436,7 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         // https://developers.google.com/android/reference/com/google/android/gms/common/ConnectionResult
+        permanentError = result;
         String reason;
         switch (result.getErrorCode()){
             case ConnectionResult.API_UNAVAILABLE:
@@ -470,15 +468,12 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
                 break;
             case ConnectionResult.SERVICE_DISABLED:
                 reason = "The installed version of Google Play services has been disabled on this device.";
-                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_INVALID:
                 reason = "The version of the Google Play services installed on this device is not authentic.";
-                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_MISSING:
                 reason = "Google Play services is missing on this device.";
-                permanentError = result;
                 break;
             case ConnectionResult.SERVICE_MISSING_PERMISSION:
                 reason = "Google Play service doesn't have one or more required permissions.";
@@ -503,5 +498,4 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
         }
         handleError("Failed to connect to Google Play Services: ".concat(reason), ERROR_GOOGLE_API_CONNECTION_FAILED);
     }
-
 }
