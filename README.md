@@ -7,6 +7,7 @@ Cordova Request Location Accuracy Plugin
   - [Android overview](#android-overview)
     - [Pre-requisites](#pre-requisites)
   - [iOS overview](#ios-overview)
+    - [iOS "Cancel" button caveat](#ios-cancel-button-caveat)
 - [Example project](#example-project)
 - [Installation](#installation)
   - [Using the Cordova/Phonegap CLI](#using-the-cordovaphonegap-cli)
@@ -68,6 +69,14 @@ The best that can be done by direct programmatic invocation of the Settings app 
 If Location Services is turned OFF, this plugin enables an app to display a native iOS system dialog which gives user the option of directly opening the Privacy page in the Settings app which contains the switch to turn Location Services ON.
 
 In order to show the native dialog allowing direct opening of the Privacy page, a location must be requested via the native location manager. So why can't you just use [cordova-plugin-geolocation](https://github.com/apache/cordova-plugin-geolocation) to request the location? Because when Location Services is OFF, the app reports that use of location is unauthorized, and [cordova-plugin-geolocation](https://github.com/apache/cordova-plugin-geolocation) will not request a location if it determines location is unauthorized: see [this Cordova issue](https://issues.apache.org/jira/browse/CB-10478).
+
+### iOS "Cancel" button caveat
+
+As highlighted by [issue #16](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues/16), there is one scenario in which the iOS implementation of this plugin fails: if, upon successfully showing the native dialog, the user presses "Cancel" instead of "Settings", any subsequent requests via this plugin **will not** show the dialog again. Ever! This is because iOS assumes that if the user pressed "Cancel", they don't want your app to use their location, so iOS prevents you from asking them again to switch on Location Services.
+
+There's no way to tell which button the user pressed in the native dialog or whether "Cancel" was pressed and the dialog is not being shown. Consequently, if the user has pressed "Cancel" in the native dialog, any subsequent calls to the plugin will still result in the success callback being invoked, since (as far as the plugin is concerned), it successfully requested a location from the native location manager.
+
+The best approach to workaround this is to recheck the state of Location Services using [canRequest()](#canrequest) on each [resume event](https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume). If the user has pressed "Settings", your app will be put in the background while the Settings app is brought into the foreground, so when the user returns to your app, it will resume from the background.
 
 # Example project
 
