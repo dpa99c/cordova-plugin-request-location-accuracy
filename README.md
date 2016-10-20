@@ -1,4 +1,4 @@
-Cordova Request Location Accuracy Plugin
+Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.shields.io/npm/v/cordova-plugin-request-location-accuracy.svg)](https://www.npmjs.com/package/cordova-plugin-request-location-accuracy) [![Total Downloads](https://img.shields.io/npm/dt/cordova-plugin-request-location-accuracy.svg)](https://npm-stat.com/charts.html?package=cordova-plugin-request-location-accuracy)
 ========================================
 <!-- START table-of-contents -->
 **Table of Contents**
