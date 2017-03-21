@@ -33,6 +33,13 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
 
 This Cordova/Phonegap plugin for Android and iOS to request enabling/changing of Location Services by triggering a native dialog from within the app, avoiding the need for the user to leave your app to change location settings manually.
 
+<!-- DONATE -->
+[![donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG_global.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZRD3W47HQ3EMJ)
+
+I dedicate a considerable amount of my free time to developing and maintaining this Cordova plugin, along with my other Open Source software.
+To help ensure this plugin is kept updated, new features are added and bugfixes are implemented quickly, please donate a couple of dollars (or a little more if you can stretch) as this will help me to afford to dedicate time to its maintenance. Please consider donating if you're using this plugin in an app that makes you money, if you're being paid to make the app, if you're asking for new features or priority bug fixes.
+<!-- END DONATE -->
+
 ## Android overview
 
 [![Example Android app screencapture](https://j.gifs.com/KRL8Mb.gif)](https://www.youtube.com/watch?v=pbNdnMDRstg)
