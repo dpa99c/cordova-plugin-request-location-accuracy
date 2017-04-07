@@ -281,10 +281,12 @@ public class RequestLocationAccuracy extends CordovaPlugin implements
     protected void handleSuccess(String msg, int code){
         try {
             Log.i(TAG, msg);
-            JSONObject success = new JSONObject();
-            success.put("message", msg);
-            success.put("code", code);
-            context.success(success);
+            if(context != null){
+                JSONObject success = new JSONObject();
+                success.put("message", msg);
+                success.put("code", code);
+                context.success(success);
+            }
         } catch (JSONException e) {
             handleError(e.getMessage(), ERROR_EXCEPTION);
         }
