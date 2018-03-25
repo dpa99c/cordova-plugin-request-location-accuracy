@@ -1,9 +1,11 @@
 Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.shields.io/npm/v/cordova-plugin-request-location-accuracy.svg)](https://www.npmjs.com/package/cordova-plugin-request-location-accuracy) [![Total Downloads](https://img.shields.io/npm/dt/cordova-plugin-request-location-accuracy.svg)](https://npm-stat.com/charts.html?package=cordova-plugin-request-location-accuracy)
 ========================================
-<!-- START table-of-contents -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Overview](#overview)
+  - [Why is this plugin not just part of cordova-diagnostic-plugin?](#why-is-this-plugin-not-just-part-of-cordova-diagnostic-plugin)
   - [Android overview](#android-overview)
     - [Pre-requisites](#pre-requisites)
   - [iOS overview](#ios-overview)
@@ -13,11 +15,10 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
   - [Using the Cordova/Phonegap CLI](#using-the-cordovaphonegap-cli)
   - [PhoneGap Build](#phonegap-build)
 - [Usage](#usage)
-  - [Android & iOS](#android-&-ios)
+  - [Android & iOS](#android--ios)
     - [request()](#request)
       - [Android](#android)
       - [iOS](#ios)
-      - [Combined Android & iOS example](#combined-android-&-ios-example)
     - [isRequesting()](#isrequesting)
     - [canRequest()](#canrequest)
   - [Android-only](#android-only)
@@ -25,9 +26,10 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
     - [Callback constants](#callback-constants)
       - [Success constants](#success-constants)
       - [Error constants](#error-constants)
+- [Full Android & iOS example](#full-android--ios-example)
 - [License](#license)
 
-<!-- END table-of-contents -->
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Overview
 
@@ -39,6 +41,16 @@ This Cordova/Phonegap plugin for Android and iOS to request enabling/changing of
 I dedicate a considerable amount of my free time to developing and maintaining this Cordova plugin, along with my other Open Source software.
 To help ensure this plugin is kept updated, new features are added and bugfixes are implemented quickly, please donate a couple of dollars (or a little more if you can stretch) as this will help me to afford to dedicate time to its maintenance. Please consider donating if you're using this plugin in an app that makes you money, if you're being paid to make the app, if you're asking for new features or priority bug fixes.
 <!-- END DONATE -->
+
+## Why is this plugin not just part of [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin)?
+
+Because:
+- you may not wish to use the location features of the diagnostic plugin and therefore may not require it
+- you may not wish to use the features of this plugin
+    - on Android, the dependency on the Google Play Services library increases the size of the app APK by about 2Mb
+
+However, since this plugin requires runtime authorization to use location to be granted by the user, you may want to use the diagnostic plugin to check for/request location permission. 
+ 
 
 ## Android overview
 
@@ -52,9 +64,7 @@ without the user needing to leave the app to do this manually on the Location Se
 
 It uses the Google Play Services Location API (v7+) to change the device location settings. In case the user doesn't have an up-to-date version of Google Play Services or there's some other problem accessing it, you may want to use another of my plugins, [cordova.plugins.diagnostic](https://github.com/dpa99c/cordova-diagnostic-plugin) as a fallback. This is able to switch the user directly to the Location Settings page where they can manually change the Location Mode.
 
-**So why is this plugin not just part of [cordova.plugins.diagnostic](https://github.com/dpa99c/cordova-diagnostic-plugin)?**
 
-Because you may not wish to use the location features of the diagnostic plugin and the dependency on the Google Play Services library increases the size of the app APK by about 2Mb.
 
 ### Pre-requisites
 
@@ -145,6 +155,8 @@ Example usage:
                    }
                }
             }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+        }else{
+            // request location permission and try again
         }
     });
 
@@ -168,32 +180,10 @@ Example usage:
             }, function(){
                 console.error("Failed to invoke native Location Services dialog");
             });
+        }else{
+            // request location permission and try again
         }
     });
-
-#### Combined Android & iOS example
-
-    cordova.plugins.locationAccuracy.canRequest(function(canRequest){
-        if(canRequest){
-            cordova.plugins.locationAccuracy.request(function(){
-                console.log("Request successful");
-            }, function (error){
-                console.error("Request failed");
-                if(error){
-                    // Android only
-                    console.error("error code="+error.code+"; error message="+error.message);
-                    if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-                        if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                            cordova.plugins.diagnostic.switchToLocationSettings();
-                        }
-                    }
-                }
-            }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY // iOS will ignore this
-            );
-        }
-    });
-
-
 
 ### isRequesting()
 
@@ -270,6 +260,80 @@ The `errorCallback()` function will be pass an object where the "code" key may c
 - `cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED`: Error due to user rejecting requested accuracy change.
 - `cordova.plugins.locationAccuracy.ERROR_GOOGLE_API_CONNECTION_FAILED`: Error due to failure to connect to Google Play Services API. The "message" key will contain a detailed description of the Google Play Services error.
 
+
+# Full Android & iOS example
+
+The following example illustrates how to use the plugin cross-platform on both Android & iOS,
+and also how to use [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin) to request runtime permission to use location if necessary.
+ 
+    function onError(error) {
+        console.error("The following error occurred: " + error);
+    }
+    
+    function handleLocationAuthorizationStatus(cb, status) {
+        switch (status) {
+            case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                cb(true);
+                break;
+            case cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
+                requestLocationAuthorization(cb);
+                break;
+            case cordova.plugins.diagnostic.permissionStatus.DENIED:
+                cb(false);
+                break;
+            case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
+                // Android only
+                cb(false);
+                break;
+            case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+                // iOS only
+                cb(true);
+                break;
+        }
+    }
+    
+    function requestLocationAuthorization(cb) {
+        cordova.plugins.diagnostic.requestLocationAuthorization(handleLocationAuthorizationStatus.bind(this, cb), onError);
+    }
+    
+    function ensureLocationAuthorization(cb) {
+        cordova.plugins.diagnostic.getLocationAuthorizationStatus(handleLocationAuthorizationStatus.bind(this, cb), onError);
+    }
+    
+    function requestLocationAccuracy(){
+        ensureLocationAuthorization(function(isAuthorized){
+            if(isAuthorized){
+                cordova.plugins.locationAccuracy.canRequest(function(canRequest){
+                    if (canRequest) {
+                        cordova.plugins.locationAccuracy.request(function () {
+                                console.log("Request successful");
+                            }, function (error) {
+                                onError("Error requesting location accuracy: " + JSON.stringify(error));
+                                if (error) {
+                                    // Android only
+                                    onError("error code=" + error.code + "; error message=" + error.message);
+                                    if (error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED) {
+                                        if (window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")) {
+                                            cordova.plugins.diagnostic.switchToLocationSettings();
+                                        }
+                                    }
+                                }
+                            }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY // iOS will ignore this
+                        );
+                    } else {
+                        // On iOS, this will occur if Location Services is currently on OR a request is currently in progress.
+                        // On Android, this will occur if the app doesn't have authorization to use location.
+                        onError("Cannot request location accuracy");
+                    }
+                });
+            }else{
+                onError("User denied permission to use location");
+            }
+        });
+    }
+    
+    // Make the request
+    requestLocationAccuracy();
 
 # License
 
