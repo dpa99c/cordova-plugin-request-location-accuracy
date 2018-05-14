@@ -28,8 +28,10 @@
         </js-module>
 
         <source-file src="src/android/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
+		
+		<preference name="PLAY_SERVICES_VERSION" default="11.+"/>
 
-        <framework src="com.google.android.gms:play-services-location:11.+" />
+        <framework src="com.google.android.gms:play-services-location:$PLAY_SERVICES_VERSION" />
     </platform>
 
     <platform name="ios">
