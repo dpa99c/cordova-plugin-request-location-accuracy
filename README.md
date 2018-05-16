@@ -1,5 +1,6 @@
 Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.shields.io/npm/v/cordova-plugin-request-location-accuracy.svg)](https://www.npmjs.com/package/cordova-plugin-request-location-accuracy) [![Total Downloads](https://img.shields.io/npm/dt/cordova-plugin-request-location-accuracy.svg)](https://npm-stat.com/charts.html?package=cordova-plugin-request-location-accuracy)
-========================================
+==========================================================================================================================================================================================================================================================================================================================================================================================================
+<!-- doctoc README.md --maxlevel=3 -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -8,6 +9,7 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
   - [Why is this plugin not just part of cordova-diagnostic-plugin?](#why-is-this-plugin-not-just-part-of-cordova-diagnostic-plugin)
   - [Android overview](#android-overview)
     - [Pre-requisites](#pre-requisites)
+    - [Android build issues](#android-build-issues)
   - [iOS overview](#ios-overview)
     - [iOS "Cancel" button caveat](#ios-cancel-button-caveat)
 - [Example project](#example-project)
@@ -17,15 +19,11 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
 - [Usage](#usage)
   - [Android & iOS](#android--ios)
     - [request()](#request)
-      - [Android](#android)
-      - [iOS](#ios)
     - [isRequesting()](#isrequesting)
     - [canRequest()](#canrequest)
   - [Android-only](#android-only)
     - [Request constants](#request-constants)
     - [Callback constants](#callback-constants)
-      - [Success constants](#success-constants)
-      - [Error constants](#error-constants)
 - [Full Android & iOS example](#full-android--ios-example)
 - [License](#license)
 
@@ -72,6 +70,15 @@ It uses the Google Play Services Location API (v7+) to change the device locatio
 Otherwise the build will fail.
 
 ![SDK Manager](http://i.stack.imgur.com/jPqsW.png)
+
+### Android build issues
+
+* This plugin depends on the [Google Play Services library](https://developers.google.com/android/guides/overview#the_google_play_services_client_library), which is referenced via Gradle during the Android build process.
+* The library version specified by the plugin attempts to keep up with the most recent major version release by Google.
+    * [See here](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/blob/master/plugin.xml#L32) for the version currently specified by this plugin.
+    * [See here](https://developers.google.com/android/guides/releases) for the list of recent versions from Google.
+* You may encounter build errors if other plugins in your Cordova project specify a different version of the Play Services library.
+* You can use [cordova-android-play-services-gradle-release](https://github.com/dpa99c/cordova-android-play-services-gradle-release) to override the version specified by this plugin (and other plugins) in your Cordova project in order to align them and prevent build errors.
 
 ## iOS overview
 
