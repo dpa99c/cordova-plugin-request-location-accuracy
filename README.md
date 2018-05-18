@@ -78,7 +78,11 @@ Otherwise the build will fail.
     * [See here](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/blob/master/plugin.xml#L32) for the version currently specified by this plugin.
     * [See here](https://developers.google.com/android/guides/releases) for the list of recent versions from Google.
 * You may encounter build errors if other plugins in your Cordova project specify a different version of the Play Services library.
-* You can use [cordova-android-play-services-gradle-release](https://github.com/dpa99c/cordova-android-play-services-gradle-release) to override the version specified by this plugin (and other plugins) in your Cordova project in order to align them and prevent build errors.
+* You can use [cordova-android-play-services-gradle-release](https://github.com/dpa99c/cordova-android-play-services-gradle-release) to override the Play Services library version specified by this plugin (and other plugins) in your Cordova project in order to align them and prevent build errors.
+* If your project includes a plugin which uses the Firebase library (such as [phonegap-plugin-push](https://github.com/phonegap/phonegap-plugin-push), [cordova-plugin-fcm](https://github.com/fechanique/cordova-plugin-fcm), [cordova-plugin-firebase](https://github.com/arnesson/cordova-plugin-firebase)) you may find your build still fails.
+* This is because the major versions of the Play Services and Firebase libraries need to align.
+* You can use [cordova-android-firebase-gradle-release](https://github.com/dpa99c/cordova-android-firebase-gradle-release) to override the Firebase library version to align with the Play Services library version specified via `cordova-android-play-services-gradle-release` in order to resolve this.
+* See [#50](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues/50) for an example.
 
 ## iOS overview
 
