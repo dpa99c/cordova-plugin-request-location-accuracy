@@ -87,7 +87,7 @@ This plugin depends on the Google Play Services library so you must install the 
     * other plugins which reference the Firebase library (or Google Services plugin), such as:
         * [phonegap-plugin-push](https://github.com/phonegap/phonegap-plugin-push)
         * [cordova-plugin-fcm](https://github.com/fechanique/cordova-plugin-fcm)
-        * [cordova-plugin-firebase](https://github.com/arnesson/cordova-plugin-firebase))
+        * [cordova-plugin-firebase](https://github.com/arnesson/cordova-plugin-firebase)
     * This is because the major versions of the Play Services and Firebase libraries need to align.
     * You can use [cordova-android-firebase-gradle-release](https://github.com/dpa99c/cordova-android-firebase-gradle-release) to override the Firebase library versions specified by other plugins to align with the Play Services library version.
         * See [#50](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues/50#issuecomment-390025013) for an example of this.
