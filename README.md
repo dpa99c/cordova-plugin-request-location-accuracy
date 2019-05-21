@@ -8,8 +8,7 @@ Cordova Request Location Accuracy Plugin [![Latest Stable Version](https://img.s
 - [Overview](#overview)
   - [Why is this plugin not just part of cordova-diagnostic-plugin?](#why-is-this-plugin-not-just-part-of-cordova-diagnostic-plugin)
   - [Android overview](#android-overview)
-    - [Pre-requisites](#pre-requisites)
-    - [Android build issues](#android-build-issues)
+    - [Android Play Services library dependency](#android-play-services-library-dependency)
   - [iOS overview](#ios-overview)
     - [iOS "Cancel" button caveat](#ios-cancel-button-caveat)
 - [Example project](#example-project)
@@ -64,25 +63,34 @@ It uses the Google Play Services Location API (v7+) to change the device locatio
 
 
 
-### Pre-requisites
-
-**IMPORTANT:** This plugin depends on the Google Play Services library, so you must install the "Google Repository" package under the "Extras" section in Android SDK Manager.
-Otherwise the build will fail.
-
+### Android Play Services library dependency
+This plugin depends on the Google Play Services library so you must install the "Google Repository" package under the "Extras" section in Android SDK Manager.
 ![SDK Manager](http://i.stack.imgur.com/jPqsW.png)
 
-### Android build issues
+#### Play Services version
+* **IMPORTANT:** This plugin is not directly responsible for, nor cannot it resolve, Android build errors which occur due to version conflicts in Gradle dependencies.
+    * If you encounter Android build errors, please read the section below in detail to understand Gradle version dependencies in relation to this plugin.
+    * Also see the [Android Library Versions guide](https://developers.google.com/android/guides/versioning).
+    * Any issues which are opened which relate to build errors caused by Gradle version conflicts will be closed immediately with a reference given to the following section.
 
-* This plugin depends on the [Google Play Services library](https://developers.google.com/android/guides/overview#the_google_play_services_client_library), which is referenced via Gradle during the Android build process.
-* The library version specified by the plugin attempts to keep up with the most recent major version release by Google.
-    * [See here](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/blob/master/plugin.xml#L32) for the version currently specified by this plugin.
-    * [See here](https://developers.google.com/android/guides/releases) for the list of recent versions from Google.
-* You may encounter build errors if other plugins in your Cordova project specify a different version of the Play Services library.
-* You can use [cordova-android-play-services-gradle-release](https://github.com/dpa99c/cordova-android-play-services-gradle-release) to override the Play Services library version specified by this plugin (and other plugins) in your Cordova project in order to align them and prevent build errors.
-* If your project includes a plugin which uses the Firebase library (such as [phonegap-plugin-push](https://github.com/phonegap/phonegap-plugin-push), [cordova-plugin-fcm](https://github.com/fechanique/cordova-plugin-fcm), [cordova-plugin-firebase](https://github.com/arnesson/cordova-plugin-firebase)) you may find your build still fails.
-* This is because the major versions of the Play Services and Firebase libraries need to align.
-* You can use [cordova-android-firebase-gradle-release](https://github.com/dpa99c/cordova-android-firebase-gradle-release) to override the Firebase library version to align with the Play Services library version specified via `cordova-android-play-services-gradle-release` in order to resolve this.
-* See [#50](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues/50) for an example.
+* This plugin depends on the `play-services-location` component of the [Google Play Services library](https://developers.google.com/android/guides/overview#the_google_play_services_client_library), which is satisfied via Gradle during the Android build process.
+* By default, [this plugin references](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/blob/master/plugin.xml#L32) the most recently released major version of the `play-services-location` component (currently `v16` - see the [Android Library Release Notes](https://developers.google.com/android/guides/releases) for most recent minor/patch version).
+* Android build errors can occur if different versions of the same library or component are specified as Gradle dependencies in the same Android project.
+* You may encounter build errors if your Cordova project includes: 
+    * other plugins which specify a different major version of the Play Services library
+        * In this case you may need to specify a custom version of the `play-services-location` component which is referenced by this plugin.
+        * You can do this using the `PLAY_SERVICES_LOCATION_VERSION` plugin variable at plugin installation - see the [installation section](#installation) for an example.
+        * You can find what other versions of the Play Services library are being referenced by looking at the `build.gradle` files in the `platforms/android/` directory of your Cordova project.
+            * Look for entries that contain `com.google.android.gms`, for example `implementation "com.google.android.gms:play-services-location:15.+"`
+    * other plugins which reference the Play Services library but do not allow you to specify a custom version (i.e the version is hard-coded) .
+        * You can use [cordova-android-play-services-gradle-release](https://github.com/dpa99c/cordova-android-play-services-gradle-release) to override the Play Services library version specified by these other plugins in order to align them and prevent build errors.
+    * other plugins which reference the Firebase library (or Google Services plugin), such as:
+        * [phonegap-plugin-push](https://github.com/phonegap/phonegap-plugin-push)
+        * [cordova-plugin-fcm](https://github.com/fechanique/cordova-plugin-fcm)
+        * [cordova-plugin-firebase](https://github.com/arnesson/cordova-plugin-firebase))
+    * This is because the major versions of the Play Services and Firebase libraries need to align.
+    * You can use [cordova-android-firebase-gradle-release](https://github.com/dpa99c/cordova-android-firebase-gradle-release) to override the Firebase library versions specified by other plugins to align with the Play Services library version.
+        * See [#50](https://github.com/dpa99c/cordova-plugin-request-location-accuracy/issues/50#issuecomment-390025013) for an example of this.
 
 ## iOS overview
 
@@ -114,8 +122,11 @@ An example project illustrating use of this plugin can be found here: [https://g
 
 ## Using the Cordova/Phonegap CLI
 
+    # Install with default Play Services Location library version
     $ cordova plugin add cordova-plugin-request-location-accuracy
-    $ phonegap plugin add cordova-plugin-request-location-accuracy
+    
+    # Install with custom Play Services Location library version
+    $ cordova plugin add cordova-plugin-request-location-accuracy --variable PLAY_SERVICES_LOCATION_VERSION=15.0.0
 
 ## PhoneGap Build
 Add the following xml to your config.xml to use the latest version of this plugin from [npm](https://www.npmjs.com/package/cordova-plugin-request-location-accuracy):

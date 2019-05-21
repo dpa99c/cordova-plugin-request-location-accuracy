@@ -2,7 +2,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-request-location-accuracy"
-    version="2.2.3">
+    version="2.3.0">
 
     <name>Request Location Accuracy</name>
     <description>Cordova/Phonegap plugin for Android and iOS to request enabling/changing of Location Services by triggering a native dialog</description>
@@ -29,7 +29,8 @@
 
         <source-file src="src/android/RequestLocationAccuracy.java" target-dir="src/cordova/plugin" />
 
-        <framework src="com.google.android.gms:play-services-location:15.+" />
+        <preference name="PLAY_SERVICES_LOCATION_VERSION" default="16.+" />
+        <framework src="com.google.android.gms:play-services-location:$PLAY_SERVICES_LOCATION_VERSION" />
     </platform>
 
     <platform name="ios">
